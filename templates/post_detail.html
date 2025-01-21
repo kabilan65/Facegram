@@ -1,0 +1,159 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="favicon.png" rel="icon" type="image/png">
+        <title>Post Detail</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{% static 'assets/css/icons.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/css/uikit.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    </head>
+
+    <body>
+        <header>
+            <div class="header_inner">
+                <form action={% url "search" %} method="GET">
+                    <div class="left-side">
+                        <a href="{% url 'home' %}" class="text-2xl mr-4">
+                            <i class="fas fa-home"></i> <!-- Font Awesome Home Icon -->
+                        </a>
+
+                        <!-- Logo -->
+                        <div id="logo" class=" uk-hidden@s">
+                            <a href="home.html">
+                                <b><h1 style="text-transform: uppercase;">Facegram</h1></b>
+                            </a>
+                        </div>
+                            <input type="text" name="username" placeholder="Search for username..">&nbsp; &nbsp;
+                            <button type="submit"><i class="fas fa-search"></i></button>
+                    </div>
+                </form>
+            </div>
+        </header>
+
+        <div class="container m-auto">
+                <!-- left sidebar-->
+                <div class="space-y-5 flex-shrink-0 lg:w-7/12">
+
+                    <!-- post 1-->
+                    <div class="bg-white shadow rounded-md  -mx-2 lg:mx-0">
+
+                        <!-- post header-->
+                        <div class="flex justify-between items-center px-4 py-3">
+                            <div class="flex flex-1 items-center space-x-4">
+                                <a href={% url "profile" post.user.username %}>
+                                    <div class="bg-gradient-to-tr from-yellow-600 to-pink-600 p-0.5 rounded-full">  
+                                        <img src={{ post.user.profile.pfp_image.url }} class="bg-gray-200 border border-white rounded-full w-8 h-8">
+                                    </div>
+                                </a>
+                                <span class="block capitalize font-semibold "><a href={% url "profile" post.user.username %}> {{post.user.username}}</a></span>
+                                <p>Posted at {{ post.created_at }} </p>
+                            </div>
+                            {% if post.user.username == user.username %}
+                                <div>
+                                    <a href="#"> <i class="icon-feather-more-horizontal text-2xl hover:bg-gray-200 rounded-full p-2 transition -mr-1 "></i> </a>
+                                    <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100  " uk-drop="mode: hover;pos: top-right">
+                                        <ul class="space-y-1">
+                                        <li> 
+                                            <a href={% url "delete_post" post.post_id %} class="flex items-center px-3 py-2 text-red-500 hover:bg-red-100 hover:text-red-500 rounded-md ">
+                                            <i class="uil-trash-alt mr-1"></i>  Delete
+                                            </a> 
+                                        </li>
+                                        </ul>
+                                    
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div uk-lightbox>
+                            {% if post.image %}
+                            <div class="text-gray-700 py-2 px-3  h-full relative lg:ml-5 ml-2 lg:mr-20">
+                                <p class="leading-6"><b>{{ post.caption }}</b></p>
+                            </div>
+                            <img src={{ post.image.url }} alt="">
+                            {% else %}
+                            <div class="text-gray-700 py-2 px-3  h-full relative lg:ml-5 ml-2 lg:mr-20">
+                                <p class="leading-6"><b>{{ post.caption }}</b></p>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="py-3 px-4 space-y-3"> 
+                            <div class="flex space-x-4 lg:font-bold">
+                                <a href={% url "like-post" post.post_id %} class="flex items-center space-x-2">
+                                    <div class="p-2 rounded-full text-black">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="25" height="25" class="">
+                                            <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                                        </svg>
+                                        {% if post.no_of_likes == 0 %}
+                                        {% elif post.no_of_likes == 1 %}
+                                            <p>{{post.no_of_likes}} Like</p>
+                                        {% else %}
+                                            <p>{{post.no_of_likes}} Likes</p>
+                                        {% endif %}
+                                    </div>
+                                </a>
+                                <a href="{% url 'post_detail' post.post_id %}" class="flex items-center space-x-2 flex-1 justify-end">
+                                    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                                        <path fill="currentColor" d="M20 2H4a2 2 0 0 0-2 2v20l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zM8 11h8v2H8v-2zm6-4H8v2h6V7z"/>
+                                    </svg>
+                                </a>                                    
+                            </div>
+                            <div class="border-t pt-4 space-y-4 ">
+                                {% if comments %}
+                                    {% for comment in comments %}
+                                        <div class="flex items-start space-x-3">
+                                            <!-- Profile Picture -->
+                                            <div class="w-10 h-10 rounded-full relative flex-shrink-0">
+                                                <a href={% url "profile" comment.author.user.username %}>
+                                                    <img src="{{ comment.author.pfp_image.url }}" alt="Profile Picture" class="absolute h-full rounded-full w-full">
+                                                </a>
+                                            </div>      
+                                            <!-- Comment Details -->
+                                            <div class="bg-gray-100 py-2 px-4 rounded-md flex-grow">
+                                                <!-- Username -->
+                                                <p class="text-sm font-semibold text-gray-900">{{ comment.author.user.username }}</p>
+                                                <!-- Comment -->
+                                                <p class="text-gray-700">{{ comment.comment }}</p>
+                                            </div>
+                                        </div>                                            
+                                    {% endfor %}
+                                {% else %}
+                                    <p>No Comments Yet!</p>
+                                {% endif %}
+                            </div>
+                            <form action="" method="POST">
+                                {% csrf_token %}
+                                <div class="bg-gray-100 bg-gray-100 rounded-full rounded-md relative ">
+                                    <input type="text" name="comment" placeholder="post a comment" class="bg-transparent max-h-10 shadow-none">
+                                    <div class="absolute bottom-0 flex h-full items-center right-0 right-3 text-xl space-x-2">
+                                        <button type="submit">
+                                            <i class="uil-message"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>               
+        </div>
+
+    <!-- Scripts
+        ================================================== -->
+        <script src="{% static 'assets/js/tippy.all.min.js' %}"></script>  
+        <script src="{% static 'assets/js/jquery-3.3.1.min.js' %}"></script>
+        <script src="{% static 'assets/js/uikit.js' %}"></script>
+        <script src="{% static 'assets/js/simplebar.js' %}"></script>
+        <script src="{% static 'assets/js/custom.js' %}"></script>
+        <script src="{% static '../../unpkg.com/ionicons%405.2.3/dist/ionicons.js' %}"></script>
+    </body>
+</html>
