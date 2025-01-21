@@ -36,5 +36,21 @@ Facegram is a social media web application inspired by Instagram. It allows user
 
 1. Clone the repository:
    ```bash
-   git clone <repository_url>
+   git clone https://github.com/kabilan65/Facegram.git
    cd Facegram
+
+2. Create a virtual environment and install dependencies:
+   ```bash
+   python -m venv env
+   source env/bin/activate  # On Windows: env\Scripts\activate
+   pip install -r requirements.txt
+
+3. Apply migrations:
+   python manage.py makemigrations
+   python manage.py migrate
+
+4. Run the development server:
+   python manage.py runserver
+
+5. Open the application in your browser:
+   Navigate to http://127.0.0.1:8000
